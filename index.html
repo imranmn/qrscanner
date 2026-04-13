@@ -29,14 +29,9 @@
         #reader button:hover {
             background-color: #0b5ed7;
         }
-        /* Mengemaskan butang pilihan (dropdown) kamera */
+        /* Menyembunyikan butang pilihan (dropdown) tukar kamera */
         #reader select {
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ced4da;
-            width: 100%;
-            max-width: 300px;
+            display: none !important;
         }
     </style>
 </head>
@@ -67,10 +62,6 @@
                         </div>
 
                     </div>
-                </div>
-                
-                <div class="text-center mt-3 text-muted small">
-                    Dikuasakan oleh HTML5 & Bootstrap 5
                 </div>
 
             </div>
@@ -119,7 +110,6 @@
                 // Menggunakan saiz relatif supaya sesuai dengan skrin telefon yang kecil
                 qrbox: { width: 250, height: 250 },
                 aspectRatio: 1.0, // Mengekalkan nisbah paparan kotak
-                rememberLastUsedCamera: true, // Memori pilihan kamera terakhir
                 videoConstraints: {
                     facingMode: "environment" // Keutamaan menggunakan kamera belakang secara lalai
                 }
