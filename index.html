@@ -29,6 +29,15 @@
         #reader button:hover {
             background-color: #0b5ed7;
         }
+        /* Mengemaskan butang pilihan (dropdown) kamera */
+        #reader select {
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            width: 100%;
+            max-width: 300px;
+        }
     </style>
 </head>
 <body class="d-flex align-items-center min-vh-100 py-4">
@@ -51,6 +60,10 @@
                             <h5 class="alert-heading fw-bold"><i class="bi bi-check-circle-fill"></i> Hasil Imbasan:</h5>
                             <hr>
                             <span id="qr-text" class="fs-5 text-break"></span>
+                            
+                            <div class="mt-4">
+                                <button class="btn btn-success" onclick="location.reload()">Imbas Kod Lain</button>
+                            </div>
                         </div>
 
                     </div>
@@ -67,6 +80,9 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
     <script>
+        // Isytihar variable di luar supaya boleh diakses oleh onScanSuccess
+        let html5QrcodeScanner;
+
         function onScanSuccess(decodedText, decodedResult) {
             const resultDiv = document.getElementById('result');
             const qrTextSpan = document.getElementById('qr-text');
@@ -80,6 +96,15 @@
             } else {
                 qrTextSpan.innerText = decodedText;
             }
+
+            // Hentikan dan padamkan kamera selepas imbasan berjaya
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear().then(() => {
+                    console.log("Kamera telah berjaya dipadamkan.");
+                }).catch(error => {
+                    console.error("Gagal memadamkan kamera.", error);
+                });
+            }
         }
 
         function onScanFailure(error) {
@@ -87,13 +112,17 @@
         }
 
         // Tetapan pengimbas
-        let html5QrcodeScanner = new Html5QrcodeScanner(
+        html5QrcodeScanner = new Html5QrcodeScanner(
             "reader",
             { 
                 fps: 10, 
                 // Menggunakan saiz relatif supaya sesuai dengan skrin telefon yang kecil
                 qrbox: { width: 250, height: 250 },
-                aspectRatio: 1.0 // Mengekalkan nisbah paparan kotak
+                aspectRatio: 1.0, // Mengekalkan nisbah paparan kotak
+                rememberLastUsedCamera: true, // Memori pilihan kamera terakhir
+                videoConstraints: {
+                    facingMode: "environment" // Keutamaan menggunakan kamera belakang secara lalai
+                }
             },
             false
         );
